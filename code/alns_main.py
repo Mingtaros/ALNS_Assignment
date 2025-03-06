@@ -63,7 +63,7 @@ if __name__ == "__main__":
     criterion = HillClimbing()
 
     
-    omegas = [5, 2, 1, 0.25]  # // Select the weights adjustment strategy
+    omegas = [8, 4, 2, 1]  # // Select the weights adjustment strategy
     lambda_ = 0.557  # // Select the decay parameter
     result = alns.iterate(
         psp, omegas, lambda_, criterion, iterations=10000, collect_stats=True
