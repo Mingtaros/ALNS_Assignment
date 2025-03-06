@@ -25,6 +25,7 @@ def destroy_1(current: PSP, random_state):
 def destroy_2(current: PSP, random_state):
     """Overworked Workers' Tasks Removal"""
     post_destroy = current.copy()
+    post_destroy.workers.sort(key=lambda worker: worker.total_hours, reverse=True)
     num_workers_to_free = random_state.randint(1, 6)
     num_tasks_to_free = random_state.randint(1, 6)
 

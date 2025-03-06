@@ -246,7 +246,7 @@ class PSP(State):
         # Logic: 
         #   - workers that have rare skills should be assigned the jobs with the rare skill requirements first
         #     before being assigned to anything else.
-        #   - the first to accept will be the cheapest worker that can get this task
+        #   - the first worker to accept will be the cheapest that can do this task
 
         # Sort tasks by skill requirement. Tasks with rarest available skills should be prioritized
         skill_availability = {}
@@ -263,15 +263,12 @@ class PSP(State):
         self.workers.sort(key=lambda worker: worker.rate)
 
         for task in self.tasks:
-            # greedy construction, for each worker, if can be assigned, assign
+            # for each worker, if can be assigned, assign
             for worker in self.workers:
                 if worker.can_assign(task):
                     worker.assign_task(task)
                     self.unassigned.remove(task)
                     break
-
-        # update solution
-        self.solution = [worker.tasks_assigned for worker in self.workers]
 
     def copy(self):
         return copy.deepcopy(self)
