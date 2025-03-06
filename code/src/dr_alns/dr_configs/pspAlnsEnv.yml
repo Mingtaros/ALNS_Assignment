@@ -1,0 +1,32 @@
+# Arguments that get passed to the constructor of your class instance
+# as config={} keyword
+environment:
+    env_id: pspAlnsEnv
+    iterations: 1000
+    instances_folder: train
+    instances: [1, 50]      # COnfistances to train on
+
+main:
+    model: PPO
+    policy: ActorCriticPolicy
+    n_workers: 10             # Parallel environments
+    n_steps: 2000000          # Steps to train
+    save_every: 200000        # Save a checkpoint of the model every n steps (must be divisible by n_workers!)
+    eval_callback: false      # Intermediate evaluation of the model (true or false)
+    eval_every: 10000         # evaluation parameter: Evaluate the model every n steps
+    eval_episodes: 10         # evaluation parameter: Number of episodes to evaluate the model
+    deterministic: false      # evaluation parameter: Use deterministic actions for evaluation (true or false)
+
+models:
+    PPO:
+        n_steps: 256          # Batch size (n_steps * n_workers)
+        batch_size: 64        # Number of minibatches for SGD/Adam updates
+        n_epochs: 10          # Number of iterations for SGD/Adam
+        gamma: 0.99           # Discount factor for future rewards
+        gae_lambda: 0.95      # Generalized advantage estimation, for controlling variance/bias tradeoff (lam in PPO2)
+        clip_range: 0.2       # Clip factor for PPO (the action probability distribution of the updated policy cannot differ from the old one by this fraction [measured by KL divergence])
+        ent_coef: 0.0         # Entropy loss coefficient (higher values encourage more exploration)
+        learning_rate: 0.0001 # LR
+        vf_coef: 0.5          # The contribution of value function loss to the total loss of the network
+        max_grad_norm: 0.5    # Max range of the gradient clipping
+        verbose: 1            # the verbosity level: 0 no output, 1 info, 2 debug
