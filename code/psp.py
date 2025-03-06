@@ -243,24 +243,27 @@ class PSP(State):
         # // Use Worker class methods to check if assignment is valid
         # -----------------------------------------------------------
         
+        # Logic: 
+        #   - workers that have rare skills should be assigned the jobs with the rare skill requirements first
+        #     before being assigned to anything else.
+        #   - the first to accept will be the cheapest worker that can get this task
+
         # Sort tasks by skill requirement. Tasks with rarest available skills should be prioritized
-        self.skill_availability = {}
+        skill_availability = {}
         for worker in self.workers:
             for skill in worker.skills:
-                if skill in self.skill_availability:
-                    self.skill_availability[skill] += 1
+                if skill in skill_availability:
+                    skill_availability[skill] += 1
                 else:
-                    self.skill_availability[skill] = 1
+                    skill_availability[skill] = 1
 
-        self.M_big_number = len(self.workers) + 1 # number of appearance should not exceed this big number
-        # aside from rarity, task should be ordered by earliest starting time
-        self.tasks.sort(key=lambda task: (self.skill_availability.get(task.skill, self.M_big_number), task.day, task.hour))
+        M_big_number = len(self.workers) + 1 # number of appearance should not exceed this big number
+        self.tasks.sort(key=lambda task: (skill_availability.get(task.skill, M_big_number)))
         # Sort workers based on cheapest rates
         self.workers.sort(key=lambda worker: worker.rate)
-        
+
         for task in self.tasks:
             # greedy construction, for each worker, if can be assigned, assign
-            # logically: the first to accept will be the cheapest worker that can get this task
             for worker in self.workers:
                 if worker.can_assign(task):
                     worker.assign_task(task)
